@@ -31,6 +31,7 @@ from .microsoft.modifyPassword import ad_modify_password
 from .microsoft.unlockAccount import ad_unlock_account
 from .microsoft.addMembersToGroups import ad_add_members_to_groups
 from .microsoft.removeMembersFromGroups import ad_remove_members_from_groups
+from .microsoft.expirePassword import ad_expire_password
 from .novell.partition_entry_count import PartitionEntryCount
 from .novell.replicaInfo import ReplicaInfo
 from .novell.listReplicas import ListReplicas
@@ -307,6 +308,11 @@ class MicrosoftExtendedOperations(ExtendedOperationContainer):
                                              groups_dn=groups,
                                              fix=fix)
 
+    def expire_password(self, user, expire=True, controls=None):
+        return ad_expire_password(self._connection,
+                                  user_dn=user,
+                                  expire=expire,
+                                  controls=controls)
 
 class ExtendedOperationsRoot(ExtendedOperationContainer):
     def __init__(self, connection):

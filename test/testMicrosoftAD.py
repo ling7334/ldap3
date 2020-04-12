@@ -259,3 +259,13 @@ class Test(unittest.TestCase):
             # print(result)
             # print(self.connection.response[0]['attributes'].keys())
             # print (len(self.connection.response[0]['attributes']['member']))
+
+    def test_expire_password(self):
+        if test_server_type == 'AD':
+            self.delete_at_teardown.append(add_user(self.connection, testcase_id, 'pwd-3', password='Rc56789efgh', attributes={'givenName': 'pwd-3'}))
+            dn = self.delete_at_teardown[-1][0]
+            result = self.connection.extend.microsoft.expire_password(dn, True)
+            self.assertEqual(result, True)
+            test_connection = get_connection(bind=False, authentication=SIMPLE, simple_credentials=(dn, 'Rc56789efgh'))
+            not_bind = test_connection.bind()
+            self.assertFalse(not_bind)
